@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useRef, useState } from "react";
 import { StrudelMirror } from '@strudel/codemirror';
-import { backgroundImage, evalScope} from '@strudel/core';
+import { evalScope} from '@strudel/core';
 import { drawPianoroll } from '@strudel/draw';
 import { initAudioOnFirstClick } from '@strudel/webaudio';
 import { transpiler } from '@strudel/transpiler';
@@ -11,9 +11,9 @@ import { stranger_tune } from './tunes';
 import console_monkey_patch, { getD3Data } from './console-monkey-patch';
 import MusicControls from './components/MusicControls'
 import PlayerControls from './components/PlayerControls'
-import ProcControls from './components/ProcControls'
 import TextArea from './components/TextArea'
-import backgroundImg from './images/prism.png'
+import { Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import './tabs.css'
 
 let globalEditor = null;
 let soundBite = null;
@@ -71,22 +71,22 @@ export default function StrudelDemo() {
 
     const hasRun = useRef(false);
     const [editorText, setEditorText] = useState(stranger_tune)
+    const [player, playerState] = useState("stop")
 
-    const handlePlay = () => {
-        globalEditor.evaluate();
+    const handlePlay = (editor) => {
+        editor.evaluate();
     }
 
-    const handleStop = () => {
-        globalEditor.stop();
+    const handleStop = (editor) => {
+        editor.stop();
     }
 
     const handleVolume = (e) => {
-        if (globalEditor != null && globalEditor.repl.state.started == true) {
+        if (player == "play") {
             setEditorText(editorText);
             var volume = e / 100
             var test = editorText
-            test = test + `\n`
-            test = test + `all(x => x.gain(`+volume+`))`
+            test = test + `\nall(x => x.gain(`+volume+`))`
             globalEditor.setCode(test)
             globalEditor.evaluate();
         }
@@ -101,7 +101,7 @@ export default function StrudelDemo() {
             //Code copied from example: https://codeberg.org/uzu/strudel/src/branch/main/examples/codemirror-repl
                 //init canvas
                 const canvas = document.getElementById('roll');
-                canvas.width = canvas.width * 4;
+                canvas.width = canvas.width * 2;
                 canvas.height = canvas.height * 2;
                 const drawContext = canvas.getContext('2d');
                 const drawTime = [-2, 2]; // time window of drawn haps
@@ -149,60 +149,103 @@ export default function StrudelDemo() {
             // Proc()
         }
         globalEditor.setCode(editorText);
+        soundBite.setCode(`// Test out sounds here!\ns("bd sd,hh*16").bank("RolandTR808")\n\n\n\n\n`);
     }, [editorText]);
 
     return (
         <div>
-            <main
-            style={{
-                backgroundImage: `url(${backgroundImg})`
-            }}>
+            <main>
                 <h2>Strudel: Music with code!</h2>
                 <div className="container-fluid">
                     <div className="row">
-                        <label>Strudel Environment</label>
                         <div className="col" style={{ maxHeight: '50vh', overflowY: 'auto', maxWidth: 'auto' }}>
-                            <div>
-                                <div id="editor" />
-                                <div id="output" />
-                            </div>
+                            <Tabs>
+                                <TabList>
+                                    <Tab>Strudel Environment</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <div>
+                                        <div id="editor" />
+                                        <div id="output" />
+                                    </div>
+                                </TabPanel>
+                            </Tabs>
                         </div>
                         <div className="col" style={{ maxHeight: '50vh', overflowY: 'hidden', maxWidth: 'auto' }}>
-                            <div>
-                                <TextArea 
-                                    defaultValue={editorText} 
-                                    onChange={(e) => setEditorText(e.target.value)} 
-                                />
-                            </div>
-                        </div>
-                    <div className="row">
-                        <div className="col">
-                            <div className="row">
-                                <div className="col" style={{ maxHeight: '60vh', overflowY: 'auto', maxWidth: 'auto' }}>
-                                    <div id="sample" />
-                                    <div id="output" />
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-4">
-                                    <MusicControls
-                                        onSlide={(e) => handleVolume(e.target.value)}
+                            <Tabs>
+                                <TabList>
+                                    <Tab>Strudel Editor</Tab>
+                                    <Tab>Player Controls</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <TextArea 
+                                        defaultValue={editorText} 
+                                        onChange={(e) => setEditorText(e.target.value)} 
                                     />
-                                </div>
-                                <nav>
-                                    <PlayerControls 
-                                        onPlay={handlePlay} 
-                                        onStop={handleStop}
-                                    />
-                                    <ProcControls/>
-                                    <br />
-                                </nav>
-                            </div>
-                            <div className="col">
-                                <canvas id="roll"></canvas>
-                            </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div style={{
+                                        background: '#222222',
+                                        padding: '10px'
+                                    }}>
+                                        <div className="col-md-4">
+                                            <MusicControls
+                                                onSlide={(e) => handleVolume(e.target.value)}
+                                            />
+                                        </div>
+                                        <nav>
+                                            <label>Player Controls</label>
+                                            <br></br>
+                                            <PlayerControls 
+                                                onPlay={() => {playerState("play"); handlePlay(globalEditor)}} 
+                                                onStop={() => {playerState("stop"); handleStop(globalEditor)}}
+                                            />
+                                            {/* <ProcControls/> */}
+                                            <br />
+                                        </nav>
+                                    </div>
+                                </TabPanel>
+                            </Tabs>
                         </div>
                     </div>
+                    <br></br>
+                    <div className="row">
+                        <div className="col">
+                            <Tabs>
+                                <TabList>
+                                    <Tab>Audio Visualiser</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <div style={{background: '#222222'}}>
+                                        <canvas id="roll"></canvas>
+                                    </div>
+                                </TabPanel>
+                            </Tabs>
+                        </div>
+                        <div className="col">
+                            <Tabs>
+                                <TabList>
+                                    <Tab>Testing Suite</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <div className="row">
+                                        <div className="col" style={{maxWidth:'50vh', maxHeight: '32vh' ,overflowY: 'auto'}}>
+                                            <div id="sample" />
+                                            <div id="output" />
+                                        </div>
+                                        <div className="col" style={{background: '#222222', maxWidth:'50vh', padding:'10px'}}>
+                                            <label> Music Controls for Testing</label>
+                                            <nav>
+                                                <PlayerControls 
+                                                    onPlay={() => {playerState("play"); handlePlay(soundBite)}} 
+                                                    onStop={() => {playerState("stop"); handleStop(soundBite)}}
+                                                />
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </TabPanel>
+                            </Tabs>
+                        </div>
                     </div>
                 </div>
             </main >

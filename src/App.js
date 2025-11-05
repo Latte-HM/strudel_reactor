@@ -160,24 +160,19 @@ export default function StrudelDemo() {
                 <h2>Strudel: Music with code!</h2>
                 <div className="container-fluid">
                     <div className="row">
+                        <label>Strudel Environment</label>
                         <div className="col" style={{ maxHeight: '50vh', overflowY: 'auto', maxWidth: 'auto' }}>
-                            <div class="card text-bg-secondary">
-                                <h5 class="card-header">Strudel Environment</h5>
-                                <div class="card-text">
-                                    <div id="editor" />
-                                    <div id="output" />
-                                </div>
+                            <div>
+                                <div id="editor" />
+                                <div id="output" />
                             </div>
                         </div>
-                        <div className="col" style={{ maxHeight: '100vh', overflowY: 'hidden', maxWidth: 'auto' }}>
-                            <div class="card text-bg-secondary">
-                                <h5 class="card-header">Edit the Studel Here!</h5>
-                                <div class="card-text">
-                                    <TextArea 
-                                        defaultValue={editorText} 
-                                        onChange={(e) => setEditorText(e.target.value)} 
-                                    />
-                                </div>
+                        <div className="col" style={{ maxHeight: '50vh', overflowY: 'hidden', maxWidth: 'auto' }}>
+                            <div>
+                                <TextArea 
+                                    defaultValue={editorText} 
+                                    onChange={(e) => setEditorText(e.target.value)} 
+                                />
                             </div>
                         </div>
                     <div className="row">
@@ -194,16 +189,14 @@ export default function StrudelDemo() {
                                         onSlide={(e) => handleVolume(e.target.value)}
                                     />
                                 </div>
-                                <div className="col-md-4">
-                                    <nav>
-                                        <PlayerControls 
-                                            onPlay={handlePlay} 
-                                            onStop={handleStop}
-                                        />
-                                        <ProcControls/>
-                                        <br />
-                                    </nav>
-                                </div>
+                                <nav>
+                                    <PlayerControls 
+                                        onPlay={handlePlay} 
+                                        onStop={handleStop}
+                                    />
+                                    <ProcControls/>
+                                    <br />
+                                </nav>
                             </div>
                             <div className="col">
                                 <canvas id="roll"></canvas>

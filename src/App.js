@@ -214,7 +214,7 @@ export default function StrudelDemo() {
                                             />
                                         </div>
                                         <div className="col" style={{background: '#222222', maxWidth:'28vh', padding:'10px'}}>
-                                            <label>Click to Download your Strudel Project!</label>
+                                            <label>Download your Strudel Project</label>
                                             <DownloadFile/>
                                         </div>
                                     </div>

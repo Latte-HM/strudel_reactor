@@ -29,11 +29,11 @@ function DownloadFile() {
     return (
         <>
             <a id="downloadStrudel" href="/#" className="btn btn-success me-1" onClick={downloadFile}>Save File</a>
-                <div class="mb-3">
-                    <label for="formFileMultiple" class="form-label">Upload Saved Project Here</label>
-                    <input class="form-control" type="file" id="selectFile" multiple></input>
-                    <button id="importFile" className="btn btn-success me-1" onClick={importFile}>Import File</button>
-                </div>
+            <div class="mb-3">
+                <label htmlFor="formFileMultiple" class="form-label">Upload Saved Project Here</label>
+                <input className="form-control" type="file" id="selectFile" multiple></input>
+                <button id="importFile" className="btn btn-success me-1" onClick={importFile}>Import File</button>
+            </div>
         </>
     )
 }

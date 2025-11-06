@@ -12,6 +12,7 @@ import console_monkey_patch, { getD3Data } from './console-monkey-patch';
 import MusicControls from './components/MusicControls'
 import PlayerControls from './components/PlayerControls'
 import TextArea from './components/TextArea'
+import DownloadFile from './components/DownloadFile'
 import { Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import './tabs.css'
 
@@ -164,10 +165,8 @@ export default function StrudelDemo() {
                                     <Tab>Strudel Environment</Tab>
                                 </TabList>
                                 <TabPanel>
-                                    <div>
-                                        <div id="editor" />
-                                        <div id="output" />
-                                    </div>
+                                    <div id="editor" />
+                                    <div id="output" />
                                 </TabPanel>
                             </Tabs>
                         </div>
@@ -176,6 +175,7 @@ export default function StrudelDemo() {
                                 <TabList>
                                     <Tab>Strudel Editor</Tab>
                                     <Tab>Player Controls</Tab>
+                                    <Tab>Saving/Exporting</Tab>
                                 </TabList>
                                 <TabPanel>
                                     <TextArea 
@@ -203,6 +203,20 @@ export default function StrudelDemo() {
                                             {/* <ProcControls/> */}
                                             <br />
                                         </nav>
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <div className="row">
+                                        <div className="col-md-8">
+                                            <TextArea 
+                                                defaultValue={editorText} 
+                                                onChange={(e) => setEditorText(e.target.value)} 
+                                            />
+                                        </div>
+                                        <div className="col" style={{background: '#222222', maxWidth:'28vh', padding:'10px'}}>
+                                            <label>Click to Download your Strudel Project!</label>
+                                            <DownloadFile/>
+                                        </div>
                                     </div>
                                 </TabPanel>
                             </Tabs>
@@ -233,14 +247,16 @@ export default function StrudelDemo() {
                                             <div id="sample" />
                                             <div id="output" />
                                         </div>
-                                        <div className="col" style={{background: '#222222', maxWidth:'50vh', padding:'10px'}}>
-                                            <label> Music Controls for Testing</label>
-                                            <nav>
-                                                <PlayerControls 
-                                                    onPlay={() => {playerState("play"); handlePlay(soundBite)}} 
-                                                    onStop={() => {playerState("stop"); handleStop(soundBite)}}
-                                                />
-                                            </nav>
+                                        <div className="col-md-5" style={{background: '#222222', maxWidth:'50vh', padding:'10px'}}>
+                                            <div>
+                                                <label> Player Controls for Testing</label>
+                                                <nav>
+                                                    <PlayerControls 
+                                                        onPlay={() => {playerState("play"); handlePlay(soundBite)}} 
+                                                        onStop={() => {playerState("stop"); handleStop(soundBite)}}
+                                                    />
+                                                </nav>
+                                            </div>
                                         </div>
                                     </div>
                                 </TabPanel>
@@ -249,6 +265,7 @@ export default function StrudelDemo() {
                     </div>
                 </div>
             </main >
+            <br></br>
         </div >
     );
 

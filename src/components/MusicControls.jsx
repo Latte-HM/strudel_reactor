@@ -1,3 +1,5 @@
+import '../bootstrapStyling.css'
+
 function MusicControls({onSlide}) {
     return (
         <>

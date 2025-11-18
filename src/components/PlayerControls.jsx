@@ -1,4 +1,4 @@
-import '../App.css'
+import '../bootstrapStyling.css'
 
 function PlayerControls({ onPlay, onStop }) {
     return (

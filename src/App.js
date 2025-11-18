@@ -15,6 +15,10 @@ import TextArea from './components/TextArea'
 import DownloadFile from './components/DownloadFile'
 import { Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import './tabs.css'
+import './bootstrapStyling.css'
+import StereoMono from './components/StereoMono'
+import MusicModifiers from './components/MusicModifiers'
+import MusicCPM from './components/MusicCPM'
 
 let globalEditor = null;
 let soundBite = null;
@@ -23,50 +27,6 @@ const handleD3Data = (event) => {
     console.log(event.detail);
 };
 
-// export function SetupButtons() {
-
-//     document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
-//     document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
-//     document.getElementById('process').addEventListener('click', () => {
-//         Proc()
-//     }
-//     )
-//     document.getElementById('process_play').addEventListener('click', () => {
-//         if (globalEditor != null) {
-//             Proc()
-//             globalEditor.evaluate()
-//         }
-//     }
-//     )
-// }
-
-
-
-// export function ProcAndPlay() {
-//     if (globalEditor != null && globalEditor.repl.state.started == true) {
-//         console.log(globalEditor)
-//         Proc()
-//         globalEditor.evaluate();
-//     }
-// }
-
-// export function Proc() {
-
-//     let proc_text = document.getElementById('proc').value
-//     let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-//     ProcessText(proc_text);
-//     globalEditor.setCode(proc_text_replaced)
-// }
-
-// export function ProcessText(match, ...args) {
-
-//     let replace = ""
-//     // if (document.getElementById('flexRadioDefault2').checked) {
-//     //     replace = "_"
-//     // }
-
-//     return replace
-// }
 
 export default function StrudelDemo() {
 
@@ -86,10 +46,54 @@ export default function StrudelDemo() {
         if (player == "play") {
             setEditorText(editorText);
             var volume = e / 100
-            var test = editorText
-            test = test + `\nall(x => x.gain(`+volume+`))`
-            globalEditor.setCode(test)
+            var modifier = editorText
+            modifier = modifier + `\nall(x => x.gain(`+volume+`))`
+            globalEditor.setCode(modifier)
             globalEditor.evaluate();
+        }
+    }
+
+    const handleStereo = (e) => {
+        if (player == "play") {
+            setEditorText(editorText);
+            var modifier = editorText
+            if (e == '1') {
+                modifier = modifier + `\nall(x => x.juxBy(1, rev))`
+            }
+            else {
+                modifier = modifier + `\nall(x => x.juxBy(0, rev))`
+            }
+
+            globalEditor.setCode(modifier)
+            globalEditor.evaluate();
+        }
+    }
+
+    const handleModifiers = (e) => {
+        console.log(e)
+        if (player == "play") {
+            setEditorText(editorText);
+            var modifier = editorText
+            if (e == 1) {
+                modifier = modifier + '\nall(x => x.lpf(500))'
+            }
+            else if (e == 2) {
+                modifier = modifier + '\nall(x => x.hpf(1000))'
+            }
+            globalEditor.setCode(modifier)
+            globalEditor.evaluate();
+        }
+    }
+
+    const handleCPM = (e) => {
+        console.log(e)
+        if (player == "play") {
+            setEditorText(editorText);
+            var modifier = editorText
+            modifier = modifier + `\nsetcpm(`+e+`)`
+            globalEditor.setCode(modifier)
+            globalEditor.evaluate();
+
         }
     }
 
@@ -202,6 +206,29 @@ export default function StrudelDemo() {
                                             />
                                             {/* <ProcControls/> */}
                                             <br />
+                                            <label> Switch between Mono and Stereo!</label>
+                                            <br></br>
+                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                <StereoMono
+                                                    onCheck={(e) => handleStereo(e.target.value)}
+                                                />
+                                            </div>
+                                            <br></br>
+                                            <br></br>
+                                            <label>Music Modifiers</label>
+                                            <div style={{maxWidth: '50vh'}}>
+                                                <MusicModifiers
+                                                    onCheck={(e) => handleModifiers(e.target.value)}
+                                                />
+                                            </div>
+                                            <br></br>
+                                            <label>Change the CPM of the song here</label>
+                                            <div class="input-group mb-3" style={{maxWidth: '50vh'}}>
+                                                <MusicCPM
+                                                    onInput={(e) => handleCPM(e.target.value)}
+                                                />
+                                            </div>
+                                            <br></br>
                                         </nav>
                                     </div>
                                 </TabPanel>

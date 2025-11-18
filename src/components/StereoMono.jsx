@@ -1,5 +1,11 @@
 import '../bootstrapStyling.css'
 
+/**
+ * class that has buttons to change between mono and stereo audio
+ * @param {onCheck}
+ * @returns StereoMono controls
+ */
+
 function StereoMono({onCheck}) {
     return (
         <>

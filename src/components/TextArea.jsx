@@ -1,5 +1,12 @@
 import '../App.css'
 
+/**
+ * class that handles the text area input, styling is done in here 
+ * as it misbehaves in the other styling sheets
+ * @param {defaultvalue, onChange}
+ * @returns textarea
+ */
+
 function TextArea({ defaultValue, onChange}) {
     return (
         <>

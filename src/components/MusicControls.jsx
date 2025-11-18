@@ -1,14 +1,15 @@
 import '../bootstrapStyling.css'
 
+/**
+ * Returns a range slider to manage the volume of the Studel Music
+ * @param {onSlide}  
+ * @returns Volume Rocker
+ */
+
 function MusicControls({onSlide}) {
     return (
         <>
-            {/* <div className="input-group mb-3">
-                <span className="input-group-text" id="cpm_label">CPM</span>
-                <input type="text" className="form-control" placeholder="e;g 60" aria-label="Username" aria-describedby="basic-addon1"/>
-            </div> */}
-
-            <label htmlFor="customRange1" className="form-label">Volume Control</label>
+            <label htmlFor="volumeSlider" className="form-label">Volume Control</label>
             <input type="range" className="form-range" min="1" max="100" id="volumeControls" onMouseUp={onSlide}></input>
 
         </>

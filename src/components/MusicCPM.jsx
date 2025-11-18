@@ -1,5 +1,11 @@
 import '../bootstrapStyling.css'
 
+/**
+ * Class that returns the input that controls the CPM of the music
+ * @param {onInput} 
+ * @returns CPM input
+ */
+
 function MusicCPM({onInput}) {
     return (
         <>

@@ -1,4 +1,9 @@
 import '../bootstrapStyling.css'
+/**
+ * This class returns the player control buttons to start and stop the Strudel Music
+ * @param {onPlay, onStop}  
+ * @returns Player Control buttons
+ */
 
 function PlayerControls({ onPlay, onStop }) {
     return (

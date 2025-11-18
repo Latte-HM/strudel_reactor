@@ -34,29 +34,40 @@ export default function StrudelDemo() {
     const [editorText, setEditorText] = useState(stranger_tune)
     const [player, playerState] = useState("stop")
 
+    // starts the music for the selected editor
     const handlePlay = (editor) => {
         editor.evaluate();
     }
 
+    // stops the music for the selected editor
     const handleStop = (editor) => {
         editor.stop();
     }
 
+    // changes the volume of the song depending on the value of the range slider
     const handleVolume = (e) => {
+        // check for the current player state to be "play"
         if (player == "play") {
             setEditorText(editorText);
+            // gain is controlled from 0 to 1, downscale range from 1 to 100 to 0 to 1
             var volume = e / 100
+            // set the modifier to be equal to the editor text
             var modifier = editorText
+            // add a new line to the editor to control volume
             modifier = modifier + `\nall(x => x.gain(`+volume+`))`
+            // update the editor with the new line, and then evaluate to start the song
             globalEditor.setCode(modifier)
             globalEditor.evaluate();
         }
     }
 
+    // changes between mono and stereo audio
     const handleStereo = (e) => {
+        // check for the current player state to be "play"
         if (player == "play") {
             setEditorText(editorText);
             var modifier = editorText
+            // if Stereo is selected, change the value to 1, else set it to 0 for mono
             if (e == '1') {
                 modifier = modifier + `\nall(x => x.juxBy(1, rev))`
             }
@@ -64,33 +75,43 @@ export default function StrudelDemo() {
                 modifier = modifier + `\nall(x => x.juxBy(0, rev))`
             }
 
+            // update the editor with the new line, and then evaluate to start the song
             globalEditor.setCode(modifier)
             globalEditor.evaluate();
         }
     }
 
+    // changes the song based on the modifier selected
     const handleModifiers = (e) => {
-        console.log(e)
+        // check for the current player state to be "play"
         if (player == "play") {
             setEditorText(editorText);
             var modifier = editorText
+            // if LPF is selected, add the LPF modifier
             if (e == 1) {
                 modifier = modifier + '\nall(x => x.lpf(500))'
             }
+            // if HPF is selected, add the HPF modifier
             else if (e == 2) {
                 modifier = modifier + '\nall(x => x.hpf(1000))'
             }
+
+            // update the editor with the new line, and then evaluate to start the song
             globalEditor.setCode(modifier)
             globalEditor.evaluate();
         }
     }
 
+    // changes the CPM of the song based on the value passed in
     const handleCPM = (e) => {
-        console.log(e)
+        // check for the current player state to be "play"
         if (player == "play") {
             setEditorText(editorText);
             var modifier = editorText
+            // adds a new line for the CPM passed in with the value provided
             modifier = modifier + `\nsetcpm(`+e+`)`
+
+            // update the editor with the new line, and then evaluate to start the song
             globalEditor.setCode(modifier)
             globalEditor.evaluate();
 
@@ -129,6 +150,7 @@ export default function StrudelDemo() {
                         await Promise.all([loadModules, registerSynthSounds(), registerSoundfonts()]);
                     },
                 });
+                // another environment for the testing space
                 soundBite = new StrudelMirror({
                     defaultOutput: webaudioOutput,
                     getTime: () => getAudioContext().currentTime,
@@ -154,6 +176,7 @@ export default function StrudelDemo() {
             // Proc()
         }
         globalEditor.setCode(editorText);
+        // add a test sample to the testing space
         soundBite.setCode(`// Test out sounds here!\ns("bd sd,hh*16").bank("RolandTR808")\n\n\n\n\n`);
     }, [editorText]);
 
@@ -164,6 +187,7 @@ export default function StrudelDemo() {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col" style={{ maxHeight: '50vh', overflowY: 'auto', maxWidth: 'auto' }}>
+                            {/* Tab for the Main Strudel Environment */}
                             <Tabs>
                                 <TabList>
                                     <Tab>Strudel Environment</Tab>
@@ -175,6 +199,7 @@ export default function StrudelDemo() {
                             </Tabs>
                         </div>
                         <div className="col" style={{ maxHeight: '50vh', overflowY: 'hidden', maxWidth: 'auto' }}>
+                            {/* Tabs for the Main Editing Area */}
                             <Tabs>
                                 <TabList>
                                     <Tab>Strudel Editor</Tab>
@@ -204,7 +229,6 @@ export default function StrudelDemo() {
                                                 onPlay={() => {playerState("play"); handlePlay(globalEditor)}} 
                                                 onStop={() => {playerState("stop"); handleStop(globalEditor)}}
                                             />
-                                            {/* <ProcControls/> */}
                                             <br />
                                             <label> Switch between Mono and Stereo!</label>
                                             <br></br>

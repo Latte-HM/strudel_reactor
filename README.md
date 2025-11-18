@@ -11,8 +11,6 @@ Most likely an issue with Panopto
 # Controls
 Volume Slider changes the volume of the strudel environment  
 Player Controls Stop and Start the Song  
-Music Modifiers currently has two modifiers  
-- Low Pass Filter
-- High Pass Filter  
+Music Modifiers currently has two modifiers, being the Low Pass Filter and the High Pass Filter    
 When selected, and the music player is playing, they will apply either of these filters  
 CPM Input changes the CPM of the song onBlur (When the text isn't in focus anymore)  
